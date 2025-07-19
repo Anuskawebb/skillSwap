@@ -1,84 +1,79 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input" // Import Input for manual skill entry
-import { BookOpen } from "lucide-react"
-import { toast } from "sonner"
-import type { StepProps } from "@/types/onboarding"
-import { useState } from "react" // Import useState for managing manual skill input
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { BookOpen } from "lucide-react";
+import { toast } from "sonner";
+import type { StepProps } from "@/types/onboarding";
+import { useState } from "react";
 
 const coreLearningSkills = [
-  { name: "New Language", category: "Education" },
-  { name: "Coding Fundamentals", category: "Tech" },
-  { name: "Graphic Design Basics", category: "Creative" },
-  { name: "Financial Literacy", category: "Business" },
-  { name: "Photography Skills", category: "Creative" },
-  { name: "Public Speaking", category: "Communication" },
-]
+  "New Language",
+  "Coding Fundamentals",
+  "Graphic Design",
+  "Financial Literacy",
+  "Photography",
+  "Public Speaking",
+  "Digital Marketing",
+  "Video Editing",
+  "Music Production",
+  "Cooking",
+  "Fitness Training",
+  "Data Science",
+  "Machine Learning",
+  "UX/UI Design",
+  "Creative Writing",
+  "Business Strategy",
+];
 
-const priorityLevels = ["Low", "Medium", "High"]
+export default function SkillsToLearnStep({
+  formData,
+  setFormData,
+  onNext,
+  onPrev,
+}: StepProps) {
+  const [manualSkill, setManualSkill] = useState("");
 
-export default function SkillsToLearnStep({ formData, setFormData, onNext, onPrev }: StepProps) {
-  const [manualSkillName, setManualSkillName] = useState("")
-  const [manualSkillCategory, setManualSkillCategory] = useState("")
-
-  const addSkill = (skillName: string, category: string) => {
-    const exists = formData.learningGoals.some((skill) => skill.name === skillName)
-    if (exists) {
-      toast.info(`${skillName} is already in your learning goals`)
-      return
+  const addSkill = (skillName: string) => {
+    if (formData.learningGoals.includes(skillName)) {
+      toast.info(`${skillName} is already in your learning goals`);
+      return;
     }
 
     setFormData((prev) => ({
       ...prev,
-      learningGoals: [
-        ...prev.learningGoals,
-        {
-          name: skillName,
-          category,
-          priority: "Medium", // Default priority
-        },
-      ],
-    }))
-  }
+      learningGoals: [...prev.learningGoals, skillName],
+    }));
+  };
 
   const addManualSkill = () => {
-    const trimmedName = manualSkillName.trim()
-    const trimmedCategory = manualSkillCategory.trim()
+    const trimmedSkill = manualSkill.trim();
 
-    if (trimmedName && trimmedCategory) {
-      addSkill(trimmedName, trimmedCategory)
-      setManualSkillName("")
-      setManualSkillCategory("")
+    if (trimmedSkill) {
+      addSkill(trimmedSkill);
+      setManualSkill("");
     } else {
-      toast.error("Please enter both a skill name and category.")
+      toast.error("Please enter a skill name.");
     }
-  }
+  };
 
   const removeSkill = (skillName: string) => {
     setFormData((prev) => ({
       ...prev,
-      learningGoals: prev.learningGoals.filter((skill) => skill.name !== skillName),
-    }))
-  }
-
-  const updateSkillPriority = (skillName: string, priority: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      learningGoals: prev.learningGoals.map((skill) => (skill.name === skillName ? { ...skill, priority } : skill)),
-    }))
-  }
+      learningGoals: prev.learningGoals.filter((skill) => skill !== skillName),
+    }));
+  };
 
   const handleNext = () => {
     if (formData.learningGoals.length === 0) {
-      toast.error("Please select at least one skill you want to learn")
-      return
+      toast.error("Please select at least one skill you want to learn");
+      return;
     }
-    onNext()
-  }
+    onNext();
+  };
 
   return (
     <motion.div
@@ -88,105 +83,92 @@ export default function SkillsToLearnStep({ formData, setFormData, onNext, onPre
       className="space-y-6"
     >
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-black text-black">What do you want to learn?</h2>
-        <p className="text-gray-600 font-medium">Select skills you'd like to master</p>
+        <h2 className="text-3xl font-black text-black">
+          What skills would you love to master?
+        </h2>
+        <p className="text-gray-600 font-medium">
+          Select at least one skill you want to learn
+        </p>
       </div>
 
       <Card className="border-2 border-black shadow-lg">
         <CardContent className="p-6 space-y-6">
           {/* Popular Learning Skills */}
           <div className="space-y-4">
-            <Label className="text-black font-bold">Popular Skills to Learn</Label>
+            <Label className="text-black font-bold">
+              Popular Learning Goals
+            </Label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {coreLearningSkills.map((skill) => (
                 <Button
-                  key={skill.name}
-                  variant="outline"
+                  key={skill}
+                  variant={
+                    formData.learningGoals.includes(skill)
+                      ? "default"
+                      : "outline"
+                  }
                   size="sm"
-                  onClick={() => addSkill(skill.name, skill.category)}
-                  className="justify-start text-left h-auto p-3 border-2 border-gray-300 hover:border-blue-400 hover:bg-blue-50 font-medium"
-                  disabled={formData.learningGoals.some((s) => s.name === skill.name)}
+                  onClick={() => addSkill(skill)}
+                  className={`justify-start text-left h-auto p-3 border-2 font-medium ${
+                    formData.learningGoals.includes(skill)
+                      ? "bg-blue-400 text-white border-black"
+                      : "border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                  }`}
                 >
-                  <div>
-                    <div className="font-bold text-black text-xs">{skill.name}</div>
-                    <div className="text-xs text-gray-500">{skill.category}</div>
-                  </div>
+                  {skill}
                 </Button>
               ))}
             </div>
           </div>
 
-          {/* Manually Add Skill to Learn */}
+          {/* Manually Add Skill */}
           <div className="space-y-4">
-            <Label className="text-black font-bold">Add Your Own Learning Goal</Label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Label className="text-black font-bold">
+              Add Your Own Learning Goal
+            </Label>
+            <div className="flex gap-2">
               <Input
-                placeholder="Skill Name (e.g., Cooking Italian Cuisine)"
-                value={manualSkillName}
-                onChange={(e) => setManualSkillName(e.target.value)}
-                className="border-2 border-gray-300 rounded-lg font-medium"
+                placeholder="Enter a skill you want to learn (e.g., Piano, French, Blockchain)"
+                value={manualSkill}
+                onChange={(e) => setManualSkill(e.target.value)}
+                className="border-2 border-gray-300 rounded-lg font-medium flex-grow"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addManualSkill();
+                  }
+                }}
               />
-              <div className="flex gap-2">
-                <Input
-                  placeholder="Category (e.g., Hobby, Culinary)"
-                  value={manualSkillCategory}
-                  onChange={(e) => setManualSkillCategory(e.target.value)}
-                  className="border-2 border-gray-300 rounded-lg font-medium flex-grow"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addManualSkill();
-                    }
-                  }}
-                />
-                <Button onClick={addManualSkill} className="bg-gray-200 hover:bg-gray-300 text-black font-bold">
-                  Add
-                </Button>
-              </div>
+              <Button
+                onClick={addManualSkill}
+                className="bg-gray-200 hover:bg-gray-300 text-black font-bold"
+              >
+                Add
+              </Button>
             </div>
           </div>
 
           {/* Selected Learning Goals */}
           {formData.learningGoals.length > 0 && (
             <div className="space-y-4">
-              <Label className="text-black font-bold">Your Learning Goals</Label>
-              <div className="space-y-3">
+              <Label className="text-black font-bold">
+                Your Learning Goals ({formData.learningGoals.length})
+              </Label>
+              <div className="flex flex-wrap gap-2">
                 {formData.learningGoals.map((skill) => (
-                  <div key={skill.name} className="p-4 border-2 border-blue-200 rounded-lg bg-blue-50">
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <span className="font-bold text-black">{skill.name}</span>
-                        <span className="text-sm text-gray-500 ml-2">({skill.category})</span>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeSkill(skill.name)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Priority Level</Label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {priorityLevels.map((level) => (
-                          <Button
-                            key={level}
-                            variant={skill.priority === level ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => updateSkillPriority(skill.name, level)}
-                            className={`text-xs ${
-                              skill.priority === level
-                                ? "bg-blue-600 text-white"
-                                : "border-blue-300 hover:border-blue-500"
-                            }`}
-                          >
-                            {level}
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
+                  <div
+                    key={skill}
+                    className="flex items-center gap-2 px-3 py-2 bg-blue-100 border-2 border-blue-300 rounded-lg"
+                  >
+                    <span className="font-medium text-black">{skill}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeSkill(skill)}
+                      className="h-auto p-1 text-red-600 hover:text-red-800 hover:bg-red-100"
+                    >
+                      ✕
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -201,15 +183,22 @@ export default function SkillsToLearnStep({ formData, setFormData, onNext, onPre
           )}
 
           <div className="flex justify-between">
-            <Button onClick={onPrev} variant="outline" className="border-2 border-gray-300 bg-transparent">
+            <Button
+              onClick={onPrev}
+              variant="outline"
+              className="border-2 border-gray-300 bg-transparent"
+            >
               Back
             </Button>
-            <Button onClick={handleNext} className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold">
+            <Button
+              onClick={handleNext}
+              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold"
+            >
               Continue
             </Button>
           </div>
         </CardContent>
       </Card>
     </motion.div>
-  )
+  );
 }
