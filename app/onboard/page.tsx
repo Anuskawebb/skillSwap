@@ -56,9 +56,17 @@ export default function OnboardPage() {
         // Wait for Clerk to load
         if (!isLoaded) return;
 
-        // If no user, redirect to sign in
+        // If no user, show welcome anyway for testing
         if (!user) {
-          router.push("/");
+          console.warn(
+            "No authenticated user found, proceeding with demo mode",
+          );
+          setFormData((prev) => ({
+            ...prev,
+            displayName: "Demo User",
+            avatarUrl: "/placeholder.svg",
+          }));
+          setIsCheckingUser(false);
           return;
         }
 
