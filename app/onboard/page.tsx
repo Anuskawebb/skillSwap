@@ -180,11 +180,24 @@ export default function OnboardPage() {
           // Map to match your User model fields
           name: finalData.displayName,
           skillsOffered: finalData.skillsOffered.map((s) =>
-            typeof s === "string" ? s : s.name,
+            typeof s === "string" ? s : s.name || String(s),
           ),
           learningGoals: finalData.learningGoals.map((s) =>
-            typeof s === "string" ? s : s.name,
+            typeof s === "string" ? s : s.name || String(s),
           ),
+          // Ensure arrays are properly formatted
+          interests: Array.isArray(finalData.interests)
+            ? finalData.interests
+            : [],
+          preferredLanguages: Array.isArray(finalData.preferredLanguages)
+            ? finalData.preferredLanguages
+            : [],
+          userIntent: Array.isArray(finalData.userIntent)
+            ? finalData.userIntent
+            : [],
+          userAvailability: Array.isArray(finalData.userAvailability)
+            ? finalData.userAvailability
+            : [],
         }),
       });
 
