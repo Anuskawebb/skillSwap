@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { motion, AnimatePresence } from "framer-motion"
-import { Progress } from "@/components/ui/progress"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft, ArrowRight } from "lucide-react"
-import { useState, useEffect } from "react"
-import { useUser } from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { motion, AnimatePresence } from "framer-motion";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-import WelcomeStep from "./welcome-step"
-import BasicInfoStep from "./basic-info-step"
-import AboutYouStep from "./about-you-step"
-import SkillsToTeachStep from "./skills-to-teach-step"
-import SkillsToLearnStep from "./skills-to-learn-step"
-import PreferencesStep from "./preferences-step"
-import WalletConnect from "@/components/wallet-connect"
+import WelcomeStep from "./welcome-step";
+import BasicInfoStep from "./basic-info-step";
+import AboutYouStep from "./about-you-step";
+import SkillsToTeachStep from "./skills-to-teach-step";
+import SkillsToLearnStep from "./skills-to-learn-step";
+import PreferencesStep from "./preferences-step";
+import WalletConnect from "@/components/wallet-connect";
 
-import type { FormData } from "@/types/onboarding"
+import type { FormData } from "@/types/onboarding";
 
 export default function OnboardPage() {
-  const { user, isLoaded } = useUser()
-  const router = useRouter()
-  const [currentStep, setCurrentStep] = useState(0)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isCheckingUser, setIsCheckingUser] = useState(true)
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingUser, setIsCheckingUser] = useState(true);
 
   const [formData, setFormData] = useState<FormData>({
     displayName: "",
@@ -44,30 +44,30 @@ export default function OnboardPage() {
     userAvailability: [],
     walletAddress: "",
     walletSignature: "",
-  })
+  });
 
-  const totalSteps = 7
-  const progress = ((currentStep + 1) / totalSteps) * 100
+  const totalSteps = 7;
+  const progress = ((currentStep + 1) / totalSteps) * 100;
 
   // Check if user already exists and initialize form data
   useEffect(() => {
     const checkUserExists = async () => {
       try {
         // Wait for Clerk to load
-        if (!isLoaded) return
+        if (!isLoaded) return;
 
         // If no user, redirect to sign in
         if (!user) {
-          router.push("/")
-          return
+          router.push("/");
+          return;
         }
 
-        const response = await fetch("/api/user")
-        const data = await response.json()
+        const response = await fetch("/api/user");
+        const data = await response.json();
 
         if (data.user && data.user.hasOnboarded) {
-          router.push("/dashboard")
-          return
+          router.push("/dashboard");
+          return;
         }
 
         // Initialize form data with user info
@@ -76,86 +76,92 @@ export default function OnboardPage() {
           displayName: user?.fullName || data.user?.name || "",
           username: data.user?.username || "",
           avatarUrl: user?.imageUrl || data.user?.avatarUrl || "",
-        }))
+        }));
       } catch (error) {
-        console.error("Error checking user:", error)
+        console.error("Error checking user:", error);
         // Initialize with basic user data even if API fails
         if (user) {
           setFormData((prev) => ({
             ...prev,
             displayName: user?.fullName || "",
             avatarUrl: user?.imageUrl || "",
-          }))
+          }));
         }
       } finally {
-        setIsCheckingUser(false)
+        setIsCheckingUser(false);
       }
-    }
+    };
 
-    checkUserExists()
-  }, [user, isLoaded, router])
+    checkUserExists();
+  }, [user, isLoaded, router]);
 
   const nextStep = () => {
     if (currentStep < totalSteps - 1) {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
     }
-  }
+  };
 
   const prevStep = () => {
     if (currentStep > 0) {
-      setCurrentStep(currentStep - 1)
+      setCurrentStep(currentStep - 1);
     }
-  }
+  };
 
-  const handleWalletConnected = (walletData: { address: string; signature: string }) => {
+  const handleWalletConnected = (walletData: {
+    address: string;
+    signature: string;
+  }) => {
     setFormData((prev) => ({
       ...prev,
       walletAddress: walletData.address,
       walletSignature: walletData.signature,
-    }))
+    }));
 
     setTimeout(() => {
-      completeOnboarding(walletData)
-    }, 1000)
-  }
+      completeOnboarding(walletData);
+    }, 1000);
+  };
 
-  const completeOnboarding = async (walletData?: { address: string; signature: string }) => {
+  const completeOnboarding = async (walletData?: {
+    address: string;
+    signature: string;
+  }) => {
     const finalData = walletData
       ? {
           ...formData,
           walletAddress: walletData.address,
           walletSignature: walletData.signature,
         }
-      : formData
+      : formData;
 
     // Basic validation
     if (!finalData.displayName.trim()) {
-      toast.error("Please enter your display name")
-      setCurrentStep(1)
-      return
+      toast.error("Please enter your display name");
+      setCurrentStep(1);
+      return;
     }
     if (!finalData.occupation) {
-      toast.error("Please select your occupation")
-      setCurrentStep(2)
-      return
+      toast.error("Please select your occupation");
+      setCurrentStep(2);
+      return;
     }
     if (finalData.skillsOffered.length === 0) {
-      toast.error("Please select at least one skill you can teach")
-      setCurrentStep(3)
-      return
+      toast.error("Please select at least one skill you can teach");
+      setCurrentStep(3);
+      return;
     }
     if (finalData.learningGoals.length === 0) {
-      toast.error("Please select at least one skill you want to learn")
-      setCurrentStep(4)
-      return
+      toast.error("Please select at least one skill you want to learn");
+      setCurrentStep(4);
+      return;
     }
     if (!finalData.walletAddress || !finalData.walletSignature) {
-      toast.error("Please connect your wallet to continue")
-      setCurrentStep(6)
-      return
+      toast.error("Please connect your wallet to continue");
+      setCurrentStep(6);
+      return;
     }
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/onboard", {
@@ -165,51 +171,61 @@ export default function OnboardPage() {
           ...finalData,
           // Map to match your User model fields
           name: finalData.displayName,
-          skillsOffered: finalData.skillsOffered.map((s) => 
-            typeof s === 'string' ? s : s.name
+          skillsOffered: finalData.skillsOffered.map((s) =>
+            typeof s === "string" ? s : s.name,
           ),
-          learningGoals: finalData.learningGoals.map((s) => 
-            typeof s === 'string' ? s : s.name
+          learningGoals: finalData.learningGoals.map((s) =>
+            typeof s === "string" ? s : s.name,
           ),
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
-        toast.success("Welcome to SkillSwap! Your on-chain learning identity is ready! 🎉")
-        router.push("/dashboard")
+        toast.success(
+          "Welcome to SkillSwap! Your on-chain learning identity is ready! 🎉",
+        );
+        router.push("/dashboard");
       } else {
         // Handle specific error codes
         switch (data.code) {
           case "ALREADY_ONBOARDED":
-            toast.info("You've already completed onboarding!")
-            router.push("/dashboard")
-            break
+            toast.info("You've already completed onboarding!");
+            router.push("/dashboard");
+            break;
           case "WALLET_ALREADY_CONNECTED":
-            toast.error("This wallet is already connected to another account.")
-            setFormData((prev) => ({ ...prev, walletAddress: "", walletSignature: "" }))
-            setCurrentStep(6)
-            break
+            toast.error("This wallet is already connected to another account.");
+            setFormData((prev) => ({
+              ...prev,
+              walletAddress: "",
+              walletSignature: "",
+            }));
+            setCurrentStep(6);
+            break;
           case "USERNAME_TAKEN":
-            toast.error("Username is already taken. Please choose another.")
-            setCurrentStep(1)
-            break
+            toast.error("Username is already taken. Please choose another.");
+            setCurrentStep(1);
+            break;
           case "VALIDATION_ERROR":
-            toast.error("Please check your form data and try again.")
-            console.error("Validation errors:", data.errors)
-            break
+            toast.error("Please check your form data and try again.");
+            console.error("Validation errors:", data.errors);
+            break;
           default:
-            toast.error(data.error || "Failed to complete onboarding. Please try again.")
+            toast.error(
+              data.error || "Failed to complete onboarding. Please try again.",
+            );
         }
       }
     } catch (error) {
-      console.error("Onboarding error:", error)
-      toast.error("Network error occurred. Please check your connection and try again.")
+      console.error("Onboarding error:", error);
+      toast.error(
+        "Network error occurred. Please check your connection and try again.",
+      );
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   if (isCheckingUser) {
     return (
@@ -218,14 +234,18 @@ export default function OnboardPage() {
           <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-black animate-pulse">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+              transition={{
+                duration: 2,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
               className="w-8 h-8 border-2 border-black border-t-transparent rounded-full"
             />
           </div>
           <p className="text-gray-600 font-medium">Checking your profile...</p>
         </div>
       </div>
-    )
+    );
   }
 
   const steps = [
@@ -237,7 +257,13 @@ export default function OnboardPage() {
       onNext={nextStep}
       onPrev={prevStep}
     />,
-    <AboutYouStep key="about-you" formData={formData} setFormData={setFormData} onNext={nextStep} onPrev={prevStep} />,
+    <AboutYouStep
+      key="about-you"
+      formData={formData}
+      setFormData={setFormData}
+      onNext={nextStep}
+      onPrev={prevStep}
+    />,
     <SkillsToTeachStep
       key="skills-teach"
       formData={formData}
@@ -272,20 +298,29 @@ export default function OnboardPage() {
           Secure your profile and enable Web3 features
         </p>
       </div>
-      <WalletConnect onWalletConnected={handleWalletConnected} isLoading={isSubmitting} />
+      <WalletConnect
+        onWalletConnected={handleWalletConnected}
+        isLoading={isSubmitting}
+      />
     </motion.div>,
-  ]
+  ];
 
   return (
     <div className="min-h-screen py-8 px-4 bg-gray-50">
       <div className="max-w-4xl mx-auto">
         {/* Progress Bar */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-600">
               Step {currentStep + 1} of {totalSteps}
             </span>
-            <span className="text-sm font-medium text-gray-600">{Math.round(progress)}% Complete</span>
+            <span className="text-sm font-medium text-gray-600">
+              {Math.round(progress)}% Complete
+            </span>
           </div>
           <Progress value={progress} className="h-3 border border-black" />
         </motion.div>
@@ -309,13 +344,16 @@ export default function OnboardPage() {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
-            <Button onClick={nextStep} className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold">
+            <Button
+              onClick={nextStep}
+              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold"
+            >
               Continue
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
-  )
+  );
 }
