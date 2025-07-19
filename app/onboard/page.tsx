@@ -341,6 +341,25 @@ export default function OnboardPage() {
         onWalletConnected={handleWalletConnected}
         isLoading={isSubmitting}
       />
+
+      {/* Testing Submit Button */}
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center py-4">
+          <div className="text-sm text-gray-500 mb-4">
+            For testing purposes:
+          </div>
+          <Button
+            onClick={() => completeOnboarding()}
+            disabled={isSubmitting}
+            variant="outline"
+            className="border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50"
+          >
+            {isSubmitting
+              ? "Submitting..."
+              : "Skip Wallet & Submit for Testing"}
+          </Button>
+        </div>
+      </div>
     </motion.div>,
   ];
 
