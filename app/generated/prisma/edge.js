@@ -172,7 +172,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/mnt/windows_c/skillSwap/app/generated/prisma",
+      "value": "/app/code/app/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -186,12 +186,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/mnt/windows_c/skillSwap/prisma/schema.prisma",
+    "sourceFilePath": "/app/code/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.12.0",
@@ -200,6 +199,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
