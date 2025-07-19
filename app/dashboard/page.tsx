@@ -47,11 +47,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-// import { useUser } from "@clerk/nextjs"; // Still useful if you want to display the real user's Clerk profile info
-import { useRouter } from "next/navigation"; // Keep useRouter for navigation links
-
-// Remove toast if it's no longer used for API errors/onboarding
-// import { toast } from "sonner"; 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 
@@ -121,8 +117,8 @@ interface DashboardData {
     description?: string;
     createdAt: string;
     metadata?: any;
-    icon: string; // Added for dummy data
-    color: string; // Added for dummy data
+    icon: string;
+    color: string;
   }>;
   reviews: Array<{
     id: string;
@@ -146,207 +142,6 @@ interface UpcomingSession {
   duration: number;
   notes?: string;
 }
-
-// --- Dummy Data ---
-const DUMMY_DASHBOARD_DATA: DashboardData = {
-  user: {
-    id: "user_clerk_123",
-    displayName: "Jane Doe",
-    username: "@janedoe_dev",
-    bio: "Passionate developer and lifelong learner.",
-    avatarUrl: "/avatars/user-jane-doe.png", // Example local path for dummy
-    reputation: 95,
-    rating: 4.8,
-    totalXP: 1250,
-    skillsTeaching: 3,
-    skillsLearning: 2,
-    sessionsCompleted: 15,
-    nftCertificates: 5,
-  },
-  skills: {
-    teaching: [
-      {
-        id: "s1",
-        skillName: "React.js",
-        category: "Frontend Development",
-        proficiency: "Expert",
-        xp: 90,
-        sessionsCount: 8,
-      },
-      {
-        id: "s2",
-        skillName: "Node.js",
-        category: "Backend Development",
-        proficiency: "Advanced",
-        xp: 75,
-        sessionsCount: 5,
-      },
-      {
-        id: "s3",
-        skillName: "Tailwind CSS",
-        category: "Frontend Development",
-        proficiency: "Intermediate",
-        xp: 60,
-        sessionsCount: 2,
-      },
-    ],
-    learning: [
-      {
-        id: "s4",
-        skillName: "Solidity",
-        category: "Blockchain",
-        proficiency: "Beginner",
-        xp: 30,
-        sessionsCount: 1,
-      },
-      {
-        id: "s5",
-        skillName: "Figma",
-        category: "UI/UX Design",
-        proficiency: "Intermediate",
-        xp: 50,
-        sessionsCount: 0,
-      },
-    ],
-  },
-  recentSessions: {
-    taught: [
-      {
-        id: "rs1",
-        skill: "React.js",
-        learner: { displayName: "Alice Smith", avatarUrl: "/avatars/alice.png" },
-        status: "Completed",
-        createdAt: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString(),
-        scheduledAt: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString(),
-      },
-    ],
-    learned: [
-      {
-        id: "rs2",
-        skill: "Solidity",
-        teacher: { displayName: "Bob Johnson", avatarUrl: "/avatars/bob.png" },
-        status: "Completed",
-        createdAt: new Date(new Date().setDate(new Date().getDate() - 5)).toISOString(),
-        scheduledAt: new Date(new Date().setDate(new Date().getDate() - 5)).toISOString(),
-      },
-    ],
-  },
-  badges: [
-    {
-      id: "b1",
-      name: "First Session Teacher",
-      description: "Completed your first teaching session",
-      rarity: "BRONZE",
-      earnedAt: new Date(new Date().setDate(new Date().getDate() - 10)).toISOString(),
-    },
-    {
-      id: "b2",
-      name: "React Master",
-      description: "Completed 5 React.js teaching sessions",
-      rarity: "SILVER",
-      earnedAt: new Date(new Date().setDate(new Date().getDate() - 7)).toISOString(),
-    },
-    {
-      id: "b3",
-      name: "Top Rated",
-      description: "Achieved an average rating of 4.5+",
-      rarity: "GOLD",
-      earnedAt: new Date(new Date().setDate(new Date().getDate() - 3)).toISOString(),
-    },
-  ],
-  activities: [
-    {
-      id: "a1",
-      type: "session_completed",
-      title: "Completed a session on React.js",
-      description: "You successfully taught React.js to Alice Smith.",
-      createdAt: new Date(new Date().setHours(new Date().getHours() - 3)).toISOString(),
-      icon: "book-open",
-      color: "bg-green-100 text-green-600",
-    },
-    {
-      id: "a2",
-      type: "badge_earned",
-      title: "Earned a new badge!",
-      description: "You've earned the 'React Master' badge.",
-      createdAt: new Date(new Date().setHours(new Date().getHours() - 12)).toISOString(),
-      icon: "award",
-      color: "bg-yellow-100 text-yellow-600",
-    },
-    {
-      id: "a3",
-      type: "review_received",
-      title: "Received a 5-star review!",
-      description: "Alice Smith rated your React.js session 5 stars.",
-      createdAt: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
-      icon: "star",
-      color: "bg-purple-100 text-purple-600",
-    },
-    {
-      id: "a4",
-      type: "skill_added",
-      title: "Added a new skill: Tailwind CSS",
-      createdAt: new Date(new Date().setDate(new Date().getDate() - 3)).toISOString(),
-      icon: "plus-circle",
-      color: "bg-blue-100 text-blue-600",
-    },
-    {
-      id: "a5",
-      type: "community_joined",
-      title: "Joined 'Web3 Builders' community",
-      createdAt: new Date(new Date().setDate(new Date().getDate() - 4)).toISOString(),
-      icon: "users",
-      color: "bg-indigo-100 text-indigo-600",
-    },
-    {
-      id: "a6",
-      type: "learning_goal_set",
-      title: "Set a new learning goal for Figma",
-      createdAt: new Date(new Date().setDate(new Date().getDate() - 6)).toISOString(),
-      icon: "target",
-      color: "bg-orange-100 text-orange-600",
-    },
-  ],
-  reviews: [
-    {
-      id: "r1",
-      rating: 5,
-      comment: "Excellent teacher, very clear explanations!",
-      reviewer: { displayName: "Alice Smith", avatarUrl: "/avatars/alice.png" },
-      createdAt: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString(),
-    },
-    {
-      id: "r2",
-      rating: 4,
-      comment: "Good session, learned a lot about Node.js.",
-      reviewer: { displayName: "Charlie Brown", avatarUrl: "/avatars/charlie.png" },
-      createdAt: new Date(new Date().setDate(new Date().getDate() - 8)).toISOString(),
-    },
-  ],
-};
-
-const DUMMY_UPCOMING_SESSIONS: UpcomingSession[] = [
-  {
-    id: "us1",
-    skill: "React.js",
-    participant: { displayName: "Emily White", avatarUrl: "/avatars/emily.png" },
-    type: "teaching",
-    scheduledAt: new Date(new Date().setHours(new Date().getHours() + 2)).toISOString(),
-    status: "Confirmed",
-    duration: 60,
-    notes: "Reviewing Hooks and Context API",
-  },
-  {
-    id: "us2",
-    skill: "Solidity",
-    participant: { displayName: "Frank Green", avatarUrl: "/avatars/frank.png" },
-    type: "learning",
-    scheduledAt: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
-    status: "Confirmed",
-    duration: 45,
-    notes: "Introduction to Smart Contracts",
-  },
-];
 
 const COMMUNITY_SUGGESTIONS = [
   {
@@ -375,86 +170,100 @@ const COMMUNITY_SUGGESTIONS = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  // We'll keep useUser for now in case you want to easily switch back to real Clerk user data later,
- 
-  // but for fetching, it's not used with dummy data.
-  // const { isSignedIn, user, isLoaded } = useUser(); 
-  const { isSignedIn, isLoaded, user } =  useUser();
-  // Initialize states directly with dummy data
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(DUMMY_DASHBOARD_DATA);
-  const [upcomingSessions, setUpcomingSessions] = useState<UpcomingSession[]>(DUMMY_UPCOMING_SESSIONS);
-  const [filteredActivities, setFilteredActivities] = useState<any[]>(DUMMY_DASHBOARD_DATA.activities); // Start with all activities
-  const [isLoading, setIsLoading] = useState(false); // Set to false initially
+  const { isSignedIn, isLoaded, user } = useUser();
+
+  // Initialize states - start with null to show loading
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null,
+  );
+  const [upcomingSessions, setUpcomingSessions] = useState<UpcomingSession[]>(
+    [],
+  );
+  const [filteredActivities, setFilteredActivities] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("all");
 
+  useEffect(() => {
+    const checkUserAndFetchDashboard = async () => {
+      console.log(
+        "State Variables - isLoaded:",
+        isLoaded,
+        "isSignedIn:",
+        isSignedIn,
+      );
 
- useEffect(() => {
-    
-    // Only proceed if Clerk is loaded and the user is signed in
-    console.log("We got inside the use effect")
-    
-    const checkUserOnboarded = async () => {
-
-      console.log("State Variables - isLoaded:", isLoaded, "isSignedIn:", isSignedIn);
-    
       if (!isLoaded) {
-      // Clerk is still loading, wait for it.
-      // You might show a full-page loader here if you want to block content.
-      return;
-    }
+        // Clerk is still loading, wait for it.
+        return;
+      }
 
-    if (!isSignedIn) {
-      // User is not signed in, redirect to auth page.
-      router.push("/auth");
-      return;
-    }
+      if (!isSignedIn) {
+        // User is not signed in, redirect to auth page.
+        router.push("/auth");
+        return;
+      }
+
+      setIsLoading(true);
 
       try {
-        // We are using POST to trigger user creation/check on the backend
-        const response = await fetch("/api/user", {
+        // Check user status first
+        const userResponse = await fetch("/api/user", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          // No body needed, Clerk's middleware provides user context to the API route
         });
 
-        console.log(response)
-
-        if (!response.ok) {
-          // Handle non-2xx responses (e.g., 401 Unauthorized, 500 Internal Server Error)
-          const errorData = await response.json();
-          console.error("API Error during onboarding check:", errorData.error || response.statusText);
-          
-          // Depending on the error, you might want to redirect or show a specific message
+        if (!userResponse.ok) {
+          const errorData = await userResponse.json();
+          console.error(
+            "API Error during user check:",
+            errorData.error || userResponse.statusText,
+          );
+          setIsLoading(false);
           return;
         }
 
-        const data = await response.json();
-        console.log("User status from /api/user GET:", data.user.hasOnboarded);
+        const userData = await userResponse.json();
+        console.log(
+          "User status from /api/user GET:",
+          userData.user?.hasOnboarded,
+        );
 
         // Check if user exists AND has not onboarded
-        // The POST route returns `data.user` which contains `hasOnboarded`
-        if (data.user && data.user.hasOnboarded === false) {
-          console.log("User exists.");  
+        if (userData.user && userData.user.hasOnboarded === false) {
+          console.log("User exists but not onboarded.");
           router.push("/onboard");
-        } else if (!data.exists) {
-            // This case means a new user was just created in the DB by the POST request.
-            // They should also be redirected to onboarding.
-          ;
-            // router.push("/onboarding");
+          return;
         }
-        // If data.exists is true and data.user.hasOnboarded is true, then no redirect is needed.
-        // If data.exists is false, a new user was created, and they should go to onboarding.
 
+        // If user is onboarded, fetch dashboard data
+        if (userData.user && userData.user.hasOnboarded) {
+          const dashboardResponse = await fetch("/api/dashboard", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (dashboardResponse.ok) {
+            const data = await dashboardResponse.json();
+            console.log("Dashboard data received:", data);
+            setDashboardData(data);
+            setUpcomingSessions([]); // No upcoming sessions in current implementation
+          } else {
+            console.error("Failed to fetch dashboard data");
+          }
+        }
       } catch (error: any) {
-        console.error("Network or unexpected error during onboarding check:", error);
-       
+        console.error("Network or unexpected error:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    checkUserOnboarded();
-  }, [isLoaded, isSignedIn, router]); // Add router to dependencies as it's used inside
+    checkUserAndFetchDashboard();
+  }, [isLoaded, isSignedIn, router]);
 
   // Filter activities when the filter state changes
   useEffect(() => {
@@ -463,7 +272,9 @@ export default function DashboardPage() {
         setFilteredActivities(dashboardData.activities);
       } else {
         setFilteredActivities(
-          dashboardData.activities.filter((activity) => activity.type.includes(filter))
+          dashboardData.activities.filter((activity) =>
+            activity.type.includes(filter),
+          ),
         );
       }
     }
@@ -484,12 +295,14 @@ export default function DashboardPage() {
         return <PlusCircle className="w-4 h-4" />;
       case "target":
         return <Target className="w-4 h-4" />;
+      case "user-plus":
+        return <UserPlus className="w-4 h-4" />;
       default:
         return <Activity className="w-4 h-4" />;
     }
   };
 
-  // Helper function to format time (unchanged)
+  // Helper function to format time
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -528,7 +341,6 @@ export default function DashboardPage() {
     );
   }
 
-  // With dummy data, dashboardData will always be present, so this block might not be needed
   if (!dashboardData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -557,7 +369,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-4">
               <Avatar className="w-16 h-16 border-2 border-black">
                 <AvatarImage
-                  src={dashboardData.user.avatarUrl || "/placeholder.svg"} // Fallback to a generic placeholder
+                  src={dashboardData.user.avatarUrl || "/placeholder.svg"}
                   alt={dashboardData.user.displayName}
                 />
                 <AvatarFallback className="bg-yellow-400 text-black font-bold text-xl">
@@ -759,7 +571,7 @@ export default function DashboardPage() {
                                 Progress:
                               </div>
                               <Progress
-                                value={(skill.xp / 100) * 100} // Assuming XP is out of 100 for progress bar
+                                value={(skill.xp / 100) * 100}
                                 className="w-24 h-2"
                               />
                               <span className="text-xs text-gray-600">
