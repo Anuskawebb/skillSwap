@@ -9,7 +9,6 @@ import { useUser } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
-
 import WelcomeStep from "./welcome-step"
 import BasicInfoStep from "./basic-info-step"
 import AboutYouStep from "./about-you-step"
@@ -21,17 +20,17 @@ import WalletConnect from "@/components/wallet-connect"
 import type { FormData } from "@/types/onboarding"
 
 export default function OnboardPage() {
-  const { user } = useUser()
+  const { user, isLoaded } = useUser()
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isCheckingUser, setIsCheckingUser] = useState(true)
 
   const [formData, setFormData] = useState<FormData>({
-    displayName: user?.fullName || "",
+    displayName: "",
     username: "",
     bio: "",
-    avatarUrl: user?.imageUrl || "",
+    avatarUrl: "",
     interests: [],
     socialLinks: {},
     occupation: "",
@@ -50,33 +49,51 @@ export default function OnboardPage() {
   const totalSteps = 7
   const progress = ((currentStep + 1) / totalSteps) * 100
 
-  // Check if user already exists
+  // Check if user already exists and initialize form data
   useEffect(() => {
     const checkUserExists = async () => {
       try {
+        // Wait for Clerk to load
+        if (!isLoaded) return
+
+        // If no user, redirect to sign in
+        if (!user) {
+          router.push("/")
+          return
+        }
+
         const response = await fetch("/api/user")
         const data = await response.json()
 
         if (data.user && data.user.hasOnboarded) {
-          // router.push("/dashboard")
+          router.push("/dashboard")
           return
         }
 
+        // Initialize form data with user info
         setFormData((prev) => ({
           ...prev,
+          displayName: user?.fullName || data.user?.name || "",
           username: data.user?.username || "",
+          avatarUrl: user?.imageUrl || data.user?.avatarUrl || "",
         }))
       } catch (error) {
         console.error("Error checking user:", error)
+        // Initialize with basic user data even if API fails
+        if (user) {
+          setFormData((prev) => ({
+            ...prev,
+            displayName: user?.fullName || "",
+            avatarUrl: user?.imageUrl || "",
+          }))
+        }
       } finally {
         setIsCheckingUser(false)
       }
     }
 
-    if (user) {
-      checkUserExists()
-    }
-  }, [user, router])
+    checkUserExists()
+  }, [user, isLoaded, router])
 
   const nextStep = () => {
     if (currentStep < totalSteps - 1) {
@@ -111,21 +128,30 @@ export default function OnboardPage() {
         }
       : formData
 
-    // Validation
+    // Basic validation
     if (!finalData.displayName.trim()) {
       toast.error("Please enter your display name")
+      setCurrentStep(1)
       return
     }
-    if (!finalData.walletAddress || !finalData.walletSignature) {
-      toast.error("Please connect your wallet to continue")
+    if (!finalData.occupation) {
+      toast.error("Please select your occupation")
+      setCurrentStep(2)
       return
     }
     if (finalData.skillsOffered.length === 0) {
       toast.error("Please select at least one skill you can teach")
+      setCurrentStep(3)
       return
     }
     if (finalData.learningGoals.length === 0) {
       toast.error("Please select at least one skill you want to learn")
+      setCurrentStep(4)
+      return
+    }
+    if (!finalData.walletAddress || !finalData.walletSignature) {
+      toast.error("Please connect your wallet to continue")
+      setCurrentStep(6)
       return
     }
 
@@ -139,8 +165,12 @@ export default function OnboardPage() {
           ...finalData,
           // Map to match your User model fields
           name: finalData.displayName,
-          skillsOffered: finalData.skillsOffered.map((s) => s.name),
-          learningGoals: finalData.learningGoals.map((s) => s.name),
+          skillsOffered: finalData.skillsOffered.map((s) => 
+            typeof s === 'string' ? s : s.name
+          ),
+          learningGoals: finalData.learningGoals.map((s) => 
+            typeof s === 'string' ? s : s.name
+          ),
         }),
       })
 
@@ -148,13 +178,13 @@ export default function OnboardPage() {
 
       if (response.ok) {
         toast.success("Welcome to SkillSwap! Your on-chain learning identity is ready! 🎉")
-        // router.push("/dashboard")
+        router.push("/dashboard")
       } else {
         // Handle specific error codes
         switch (data.code) {
           case "ALREADY_ONBOARDED":
             toast.info("You've already completed onboarding!")
-            // router.push("/dashboard")
+            router.push("/dashboard")
             break
           case "WALLET_ALREADY_CONNECTED":
             toast.error("This wallet is already connected to another account.")
@@ -164,6 +194,10 @@ export default function OnboardPage() {
           case "USERNAME_TAKEN":
             toast.error("Username is already taken. Please choose another.")
             setCurrentStep(1)
+            break
+          case "VALIDATION_ERROR":
+            toast.error("Please check your form data and try again.")
+            console.error("Validation errors:", data.errors)
             break
           default:
             toast.error(data.error || "Failed to complete onboarding. Please try again.")
@@ -232,6 +266,12 @@ export default function OnboardPage() {
       exit={{ opacity: 0, y: -20 }}
       className="space-y-6"
     >
+      <div className="text-center space-y-2 mb-6">
+        <h2 className="text-3xl font-black text-black">Connect Your Wallet</h2>
+        <p className="text-gray-600 font-medium">
+          Secure your profile and enable Web3 features
+        </p>
+      </div>
       <WalletConnect onWalletConnected={handleWalletConnected} isLoading={isSubmitting} />
     </motion.div>,
   ]
@@ -273,7 +313,7 @@ export default function OnboardPage() {
               Continue
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-          </motion.div>
+          </div>
         )}
       </div>
     </div>
