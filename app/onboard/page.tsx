@@ -176,28 +176,46 @@ export default function OnboardPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...finalData,
-          // Map to match your User model fields
+          // Map form data to match Prisma User model exactly
           name: finalData.displayName,
-          skillsOffered: finalData.skillsOffered.map((s) =>
-            typeof s === "string" ? s : s.name || String(s),
-          ),
-          learningGoals: finalData.learningGoals.map((s) =>
-            typeof s === "string" ? s : s.name || String(s),
-          ),
-          // Ensure arrays are properly formatted
+          username: finalData.username || "",
+          bio: finalData.bio || null,
+          avatarUrl: finalData.avatarUrl || null,
+          occupation: finalData.occupation,
+          location: finalData.location || null,
+          timezone: finalData.timezone,
+          age: Number(finalData.age) || 0,
+          walletAddress: finalData.walletAddress || null,
+
+          // Array fields
           interests: Array.isArray(finalData.interests)
-            ? finalData.interests
+            ? finalData.interests.filter(Boolean)
             : [],
           preferredLanguages: Array.isArray(finalData.preferredLanguages)
-            ? finalData.preferredLanguages
+            ? finalData.preferredLanguages.filter(Boolean)
+            : [],
+          skillsOffered: Array.isArray(finalData.skillsOffered)
+            ? finalData.skillsOffered
+                .map((s) => (typeof s === "string" ? s : s.name || String(s)))
+                .filter(Boolean)
+            : [],
+          learningGoals: Array.isArray(finalData.learningGoals)
+            ? finalData.learningGoals
+                .map((s) => (typeof s === "string" ? s : s.name || String(s)))
+                .filter(Boolean)
             : [],
           userIntent: Array.isArray(finalData.userIntent)
-            ? finalData.userIntent
+            ? finalData.userIntent.filter(Boolean)
             : [],
           userAvailability: Array.isArray(finalData.userAvailability)
-            ? finalData.userAvailability
+            ? finalData.userAvailability.filter(Boolean)
             : [],
+
+          // JSON field
+          socialLinks:
+            finalData.socialLinks && typeof finalData.socialLinks === "object"
+              ? finalData.socialLinks
+              : null,
         }),
       });
 
