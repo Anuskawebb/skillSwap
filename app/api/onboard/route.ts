@@ -87,28 +87,68 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Transform and clean the data according to Prisma schema
+    const updateData = {
+      // Required fields
+      name: body.name || body.displayName,
+      username: body.username,
+      occupation: body.occupation,
+      timezone: body.timezone,
+      age: Number(body.age),
+
+      // Optional fields - use null for empty strings to match schema
+      bio: body.bio && body.bio.trim() ? body.bio.trim() : null,
+      avatarUrl:
+        body.avatarUrl && body.avatarUrl.trim()
+          ? body.avatarUrl.trim()
+          : existingUser.avatarUrl,
+      location:
+        body.location && body.location.trim() ? body.location.trim() : null,
+      walletAddress:
+        body.walletAddress && body.walletAddress.trim()
+          ? body.walletAddress.trim()
+          : null,
+
+      // Array fields - ensure they are arrays
+      interests: Array.isArray(body.interests)
+        ? body.interests.filter(Boolean)
+        : [],
+      preferredLanguages: Array.isArray(body.preferredLanguages)
+        ? body.preferredLanguages.filter(Boolean)
+        : [],
+      skillsOffered: Array.isArray(body.skillsOffered)
+        ? body.skillsOffered
+            .map((s: any) => (typeof s === "string" ? s : s.name || String(s)))
+            .filter(Boolean)
+        : [],
+      learningGoals: Array.isArray(body.learningGoals)
+        ? body.learningGoals
+            .map((s: any) => (typeof s === "string" ? s : s.name || String(s)))
+            .filter(Boolean)
+        : [],
+      userIntent: Array.isArray(body.userIntent)
+        ? body.userIntent.filter(Boolean)
+        : [],
+      userAvailability: Array.isArray(body.userAvailability)
+        ? body.userAvailability.filter(Boolean)
+        : [],
+
+      // JSON field
+      socialLinks:
+        body.socialLinks && typeof body.socialLinks === "object"
+          ? body.socialLinks
+          : null,
+
+      // Mark as onboarded
+      hasOnboarded: true,
+    };
+
+    console.log("Transformed data for database:", updateData);
+
     // Update user with onboarding data
     const updatedUser = await prisma.user.update({
       where: { clerkId: userId },
-      data: {
-        name: body.name,
-        username: body.username,
-        bio: body.bio || null,
-        avatarUrl: body.avatarUrl || existingUser.avatarUrl,
-        interests: body.interests || [],
-        socialLinks: body.socialLinks || {},
-        preferredLanguages: body.preferredLanguages || [],
-        occupation: body.occupation,
-        location: body.location || null,
-        timezone: body.timezone,
-        age: body.age,
-        skillsOffered: body.skillsOffered || [],
-        learningGoals: body.learningGoals || [],
-        userIntent: body.userIntent || [],
-        userAvailability: body.userAvailability || [],
-        walletAddress: body.walletAddress || null,
-        hasOnboarded: true,
-      },
+      data: updateData,
     });
 
     console.log("User onboarding completed:", updatedUser.id);
