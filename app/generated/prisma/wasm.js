@@ -134,7 +134,7 @@ exports.Prisma.UserScalarFieldEnum = {
   occupation: 'occupation',
   location: 'location',
   timezone: 'timezone',
-  age: 'age',
+  ageGroup: 'ageGroup',
   skillsOffered: 'skillsOffered',
   learningGoals: 'learningGoals',
   userIntent: 'userIntent',

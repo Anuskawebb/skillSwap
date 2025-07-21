@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    console.log("Onboarding data received:", body);
+ 
 
     // Validate the form data
     const validationErrors = validateCompleteForm(body);
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
       username: body.username,
       occupation: body.occupation,
       timezone: body.timezone,
-      age: Number(body.age),
+      ageGroup: body.ageGroup,
 
       // Optional fields - use null for empty strings to match schema
       bio: body.bio && body.bio.trim() ? body.bio.trim() : null,

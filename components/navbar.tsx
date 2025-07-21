@@ -1,10 +1,35 @@
 "use client"
 
-import { UserButton, SignInButton, useUser } from "@clerk/nextjs"
+import { UserButton, SignInButton, useUser, SignUpButton } from "@clerk/nextjs"
 import Link from "next/link"
+import { useEffect } from "react"
 
 export default function Navbar() {
   const { isSignedIn, user } = useUser()
+
+  useEffect(() => {
+    if (isSignedIn && user) {
+      console.log("User is signed in:", user)
+       const saveUserData = async() =>{
+      const response = await fetch("/api/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        }
+        
+      })
+
+      const data = await response.json();
+      console.log("User data saved:", data);
+    }
+
+    saveUserData();
+    } else {
+      console.log("User is not signed in")
+    }
+  }, [isSignedIn, user])
+
+ 
 
   return (
     <nav className="border-b border-gray-200 bg-white">
@@ -25,11 +50,18 @@ export default function Navbar() {
                 <UserButton afterSignOutUrl="/" />
               </>
             ) : (
-              <SignInButton mode="modal">
-                <button className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
+              <>
+                   <SignInButton mode="modal">
+                <button  className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">
                   Sign In
                 </button>
               </SignInButton>
+              <SignUpButton mode="modal">
+                <button > 
+                  Sign Up
+                </button>
+                </SignUpButton></>
+         
             )}
           </div>
         </div>

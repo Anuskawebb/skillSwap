@@ -1005,18 +1005,8 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
-  }
-
-  export type UserAvgAggregateOutputType = {
-    age: number | null
-  }
-
-  export type UserSumAggregateOutputType = {
-    age: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1030,7 +1020,7 @@ export namespace Prisma {
     occupation: string | null
     location: string | null
     timezone: string | null
-    age: number | null
+    ageGroup: string | null
     walletAddress: string | null
     hasOnboarded: boolean | null
     createdAt: Date | null
@@ -1048,7 +1038,7 @@ export namespace Prisma {
     occupation: string | null
     location: string | null
     timezone: string | null
-    age: number | null
+    ageGroup: string | null
     walletAddress: string | null
     hasOnboarded: boolean | null
     createdAt: Date | null
@@ -1069,7 +1059,7 @@ export namespace Prisma {
     occupation: number
     location: number
     timezone: number
-    age: number
+    ageGroup: number
     skillsOffered: number
     learningGoals: number
     userIntent: number
@@ -1082,14 +1072,6 @@ export namespace Prisma {
   }
 
 
-  export type UserAvgAggregateInputType = {
-    age?: true
-  }
-
-  export type UserSumAggregateInputType = {
-    age?: true
-  }
-
   export type UserMinAggregateInputType = {
     id?: true
     clerkId?: true
@@ -1101,7 +1083,7 @@ export namespace Prisma {
     occupation?: true
     location?: true
     timezone?: true
-    age?: true
+    ageGroup?: true
     walletAddress?: true
     hasOnboarded?: true
     createdAt?: true
@@ -1119,7 +1101,7 @@ export namespace Prisma {
     occupation?: true
     location?: true
     timezone?: true
-    age?: true
+    ageGroup?: true
     walletAddress?: true
     hasOnboarded?: true
     createdAt?: true
@@ -1140,7 +1122,7 @@ export namespace Prisma {
     occupation?: true
     location?: true
     timezone?: true
-    age?: true
+    ageGroup?: true
     skillsOffered?: true
     learningGoals?: true
     userIntent?: true
@@ -1190,18 +1172,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: UserAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: UserSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1232,8 +1202,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
-    _avg?: UserAvgAggregateInputType
-    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -1252,7 +1220,7 @@ export namespace Prisma {
     occupation: string
     location: string | null
     timezone: string
-    age: number
+    ageGroup: string | null
     skillsOffered: string[]
     learningGoals: string[]
     userIntent: string[]
@@ -1262,8 +1230,6 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1296,7 +1262,7 @@ export namespace Prisma {
     occupation?: boolean
     location?: boolean
     timezone?: boolean
-    age?: boolean
+    ageGroup?: boolean
     skillsOffered?: boolean
     learningGoals?: boolean
     userIntent?: boolean
@@ -1324,7 +1290,7 @@ export namespace Prisma {
     occupation?: boolean
     location?: boolean
     timezone?: boolean
-    age?: boolean
+    ageGroup?: boolean
     skillsOffered?: boolean
     learningGoals?: boolean
     userIntent?: boolean
@@ -1349,7 +1315,7 @@ export namespace Prisma {
     occupation?: boolean
     location?: boolean
     timezone?: boolean
-    age?: boolean
+    ageGroup?: boolean
     skillsOffered?: boolean
     learningGoals?: boolean
     userIntent?: boolean
@@ -1374,7 +1340,7 @@ export namespace Prisma {
     occupation?: boolean
     location?: boolean
     timezone?: boolean
-    age?: boolean
+    ageGroup?: boolean
     skillsOffered?: boolean
     learningGoals?: boolean
     userIntent?: boolean
@@ -1385,7 +1351,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clerkId" | "email" | "name" | "username" | "bio" | "avatarUrl" | "interests" | "socialLinks" | "preferredLanguages" | "occupation" | "location" | "timezone" | "age" | "skillsOffered" | "learningGoals" | "userIntent" | "userAvailability" | "walletAddress" | "hasOnboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clerkId" | "email" | "name" | "username" | "bio" | "avatarUrl" | "interests" | "socialLinks" | "preferredLanguages" | "occupation" | "location" | "timezone" | "ageGroup" | "skillsOffered" | "learningGoals" | "userIntent" | "userAvailability" | "walletAddress" | "hasOnboarded" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     SessionsTaught?: boolean | User$SessionsTaughtArgs<ExtArgs>
     SessionsLearned?: boolean | User$SessionsLearnedArgs<ExtArgs>
@@ -1414,7 +1380,7 @@ export namespace Prisma {
       occupation: string
       location: string | null
       timezone: string
-      age: number
+      ageGroup: string | null
       skillsOffered: string[]
       learningGoals: string[]
       userIntent: string[]
@@ -1861,7 +1827,7 @@ export namespace Prisma {
     readonly occupation: FieldRef<"User", 'String'>
     readonly location: FieldRef<"User", 'String'>
     readonly timezone: FieldRef<"User", 'String'>
-    readonly age: FieldRef<"User", 'Int'>
+    readonly ageGroup: FieldRef<"User", 'String'>
     readonly skillsOffered: FieldRef<"User", 'String[]'>
     readonly learningGoals: FieldRef<"User", 'String[]'>
     readonly userIntent: FieldRef<"User", 'String[]'>
@@ -3513,7 +3479,7 @@ export namespace Prisma {
     occupation: 'occupation',
     location: 'location',
     timezone: 'timezone',
-    age: 'age',
+    ageGroup: 'ageGroup',
     skillsOffered: 'skillsOffered',
     learningGoals: 'learningGoals',
     userIntent: 'userIntent',
@@ -3618,20 +3584,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -3649,6 +3601,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -3686,7 +3652,7 @@ export namespace Prisma {
     occupation?: StringFilter<"User"> | string
     location?: StringNullableFilter<"User"> | string | null
     timezone?: StringFilter<"User"> | string
-    age?: IntFilter<"User"> | number
+    ageGroup?: StringNullableFilter<"User"> | string | null
     skillsOffered?: StringNullableListFilter<"User">
     learningGoals?: StringNullableListFilter<"User">
     userIntent?: StringNullableListFilter<"User">
@@ -3713,7 +3679,7 @@ export namespace Prisma {
     occupation?: SortOrder
     location?: SortOrderInput | SortOrder
     timezone?: SortOrder
-    age?: SortOrder
+    ageGroup?: SortOrderInput | SortOrder
     skillsOffered?: SortOrder
     learningGoals?: SortOrder
     userIntent?: SortOrder
@@ -3744,7 +3710,7 @@ export namespace Prisma {
     occupation?: StringFilter<"User"> | string
     location?: StringNullableFilter<"User"> | string | null
     timezone?: StringFilter<"User"> | string
-    age?: IntFilter<"User"> | number
+    ageGroup?: StringNullableFilter<"User"> | string | null
     skillsOffered?: StringNullableListFilter<"User">
     learningGoals?: StringNullableListFilter<"User">
     userIntent?: StringNullableListFilter<"User">
@@ -3770,7 +3736,7 @@ export namespace Prisma {
     occupation?: SortOrder
     location?: SortOrderInput | SortOrder
     timezone?: SortOrder
-    age?: SortOrder
+    ageGroup?: SortOrderInput | SortOrder
     skillsOffered?: SortOrder
     learningGoals?: SortOrder
     userIntent?: SortOrder
@@ -3780,10 +3746,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
-    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
-    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -3803,7 +3767,7 @@ export namespace Prisma {
     occupation?: StringWithAggregatesFilter<"User"> | string
     location?: StringNullableWithAggregatesFilter<"User"> | string | null
     timezone?: StringWithAggregatesFilter<"User"> | string
-    age?: IntWithAggregatesFilter<"User"> | number
+    ageGroup?: StringNullableWithAggregatesFilter<"User"> | string | null
     skillsOffered?: StringNullableListFilter<"User">
     learningGoals?: StringNullableListFilter<"User">
     userIntent?: StringNullableListFilter<"User">
@@ -3910,10 +3874,10 @@ export namespace Prisma {
     interests?: UserCreateinterestsInput | string[]
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     preferredLanguages?: UserCreatepreferredLanguagesInput | string[]
-    occupation: string
+    occupation?: string
     location?: string | null
-    timezone: string
-    age: number
+    timezone?: string
+    ageGroup?: string | null
     skillsOffered?: UserCreateskillsOfferedInput | string[]
     learningGoals?: UserCreatelearningGoalsInput | string[]
     userIntent?: UserCreateuserIntentInput | string[]
@@ -3937,10 +3901,10 @@ export namespace Prisma {
     interests?: UserCreateinterestsInput | string[]
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     preferredLanguages?: UserCreatepreferredLanguagesInput | string[]
-    occupation: string
+    occupation?: string
     location?: string | null
-    timezone: string
-    age: number
+    timezone?: string
+    ageGroup?: string | null
     skillsOffered?: UserCreateskillsOfferedInput | string[]
     learningGoals?: UserCreatelearningGoalsInput | string[]
     userIntent?: UserCreateuserIntentInput | string[]
@@ -3967,7 +3931,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]
@@ -3994,7 +3958,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]
@@ -4018,10 +3982,10 @@ export namespace Prisma {
     interests?: UserCreateinterestsInput | string[]
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     preferredLanguages?: UserCreatepreferredLanguagesInput | string[]
-    occupation: string
+    occupation?: string
     location?: string | null
-    timezone: string
-    age: number
+    timezone?: string
+    ageGroup?: string | null
     skillsOffered?: UserCreateskillsOfferedInput | string[]
     learningGoals?: UserCreatelearningGoalsInput | string[]
     userIntent?: UserCreateuserIntentInput | string[]
@@ -4046,7 +4010,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]
@@ -4071,7 +4035,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]
@@ -4232,17 +4196,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -4288,7 +4241,7 @@ export namespace Prisma {
     occupation?: SortOrder
     location?: SortOrder
     timezone?: SortOrder
-    age?: SortOrder
+    ageGroup?: SortOrder
     skillsOffered?: SortOrder
     learningGoals?: SortOrder
     userIntent?: SortOrder
@@ -4297,10 +4250,6 @@ export namespace Prisma {
     hasOnboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type UserAvgOrderByAggregateInput = {
-    age?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -4314,7 +4263,7 @@ export namespace Prisma {
     occupation?: SortOrder
     location?: SortOrder
     timezone?: SortOrder
-    age?: SortOrder
+    ageGroup?: SortOrder
     walletAddress?: SortOrder
     hasOnboarded?: SortOrder
     createdAt?: SortOrder
@@ -4332,15 +4281,11 @@ export namespace Prisma {
     occupation?: SortOrder
     location?: SortOrder
     timezone?: SortOrder
-    age?: SortOrder
+    ageGroup?: SortOrder
     walletAddress?: SortOrder
     hasOnboarded?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type UserSumOrderByAggregateInput = {
-    age?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -4405,22 +4350,6 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
@@ -4441,6 +4370,17 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type UserScalarRelationFilter = {
@@ -4491,6 +4431,22 @@ export namespace Prisma {
 
   export type SessionSumOrderByAggregateInput = {
     duration?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type UserCreateinterestsInput = {
@@ -4561,14 +4517,6 @@ export namespace Prisma {
   export type UserUpdatepreferredLanguagesInput = {
     set?: string[]
     push?: string | string[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UserUpdateskillsOfferedInput = {
@@ -4676,6 +4624,14 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutSessionsTaughtNestedInput = {
     create?: XOR<UserCreateWithoutSessionsTaughtInput, UserUncheckedCreateWithoutSessionsTaughtInput>
     connectOrCreate?: UserCreateOrConnectWithoutSessionsTaughtInput
@@ -4720,17 +4676,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -4762,6 +4707,17 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -4815,6 +4771,28 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -4840,28 +4818,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type SessionCreateWithoutTeacherInput = {
@@ -4991,10 +4947,10 @@ export namespace Prisma {
     interests?: UserCreateinterestsInput | string[]
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     preferredLanguages?: UserCreatepreferredLanguagesInput | string[]
-    occupation: string
+    occupation?: string
     location?: string | null
-    timezone: string
-    age: number
+    timezone?: string
+    ageGroup?: string | null
     skillsOffered?: UserCreateskillsOfferedInput | string[]
     learningGoals?: UserCreatelearningGoalsInput | string[]
     userIntent?: UserCreateuserIntentInput | string[]
@@ -5017,10 +4973,10 @@ export namespace Prisma {
     interests?: UserCreateinterestsInput | string[]
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     preferredLanguages?: UserCreatepreferredLanguagesInput | string[]
-    occupation: string
+    occupation?: string
     location?: string | null
-    timezone: string
-    age: number
+    timezone?: string
+    ageGroup?: string | null
     skillsOffered?: UserCreateskillsOfferedInput | string[]
     learningGoals?: UserCreatelearningGoalsInput | string[]
     userIntent?: UserCreateuserIntentInput | string[]
@@ -5048,10 +5004,10 @@ export namespace Prisma {
     interests?: UserCreateinterestsInput | string[]
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     preferredLanguages?: UserCreatepreferredLanguagesInput | string[]
-    occupation: string
+    occupation?: string
     location?: string | null
-    timezone: string
-    age: number
+    timezone?: string
+    ageGroup?: string | null
     skillsOffered?: UserCreateskillsOfferedInput | string[]
     learningGoals?: UserCreatelearningGoalsInput | string[]
     userIntent?: UserCreateuserIntentInput | string[]
@@ -5074,10 +5030,10 @@ export namespace Prisma {
     interests?: UserCreateinterestsInput | string[]
     socialLinks?: NullableJsonNullValueInput | InputJsonValue
     preferredLanguages?: UserCreatepreferredLanguagesInput | string[]
-    occupation: string
+    occupation?: string
     location?: string | null
-    timezone: string
-    age: number
+    timezone?: string
+    ageGroup?: string | null
     skillsOffered?: UserCreateskillsOfferedInput | string[]
     learningGoals?: UserCreatelearningGoalsInput | string[]
     userIntent?: UserCreateuserIntentInput | string[]
@@ -5119,7 +5075,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]
@@ -5145,7 +5101,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]
@@ -5182,7 +5138,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]
@@ -5208,7 +5164,7 @@ export namespace Prisma {
     occupation?: StringFieldUpdateOperationsInput | string
     location?: NullableStringFieldUpdateOperationsInput | string | null
     timezone?: StringFieldUpdateOperationsInput | string
-    age?: IntFieldUpdateOperationsInput | number
+    ageGroup?: NullableStringFieldUpdateOperationsInput | string | null
     skillsOffered?: UserUpdateskillsOfferedInput | string[]
     learningGoals?: UserUpdatelearningGoalsInput | string[]
     userIntent?: UserUpdateuserIntentInput | string[]

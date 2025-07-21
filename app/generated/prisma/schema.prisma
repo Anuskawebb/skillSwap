@@ -20,23 +20,23 @@ model User {
   bio       String?
   avatarUrl String?
 
-  interests String[]
+  interests String[] @default([]) // Array of interests or hobbies
 
   socialLinks        Json? // Store social links as a JSON object
   preferredLanguages String[]
 
-  occupation String
+  occupation String  @default("Not specified")
   location   String?
-  timezone   String
+  timezone   String  @default("UTC")
 
-  age Int
+  ageGroup String? // e.g., "18-24", "25-34", etc.
 
-  skillsOffered String[] // Skills the user can teach
-  learningGoals String[] // Skills the user wants to learn
+  skillsOffered String[] @default([]) // Skills the user can teach 
+  learningGoals String[] @default([]) // Skills the user wants to learn
 
-  userIntent String[] // Intent of the user (e.g., "teach", "learn", "both")
+  userIntent String[] @default([]) // Intent of the user (e.g., "teach", "learn", "both")
 
-  userAvailability String[] // User's availability for sessions
+  userAvailability String[] @default([]) // User's availability for sessions
 
   SessionsTaught  Session[] @relation("SessionsTaught")
   SessionsLearned Session[] @relation("SessionsLearned")

@@ -4,6 +4,7 @@ import { auth, currentUser } from "@clerk/nextjs/server"
 
 export async function GET(request: NextRequest) {
   const {userId: clerkId} = await auth();
+  console.log("User Id from Clerk:", clerkId);
 
   if (!clerkId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
       data: {
         clerkId: userId,
         // Populate fields from the Clerk user object
-        name: clerkUser?.fullName || null, // Use fullName, provide fallback
+        name: clerkUser?.fullName || "", // Use fullName, provide fallback
         email: clerkUser?.emailAddresses?.[0]?.emailAddress || null, // Safely access email
         username: generatedUsername, // Use the generated unique username
         avatarUrl: clerkUser?.imageUrl || null, // Use imageUrl
